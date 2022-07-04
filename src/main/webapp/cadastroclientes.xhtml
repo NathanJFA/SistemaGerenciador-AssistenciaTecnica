@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Cadastro de Clientes</title>
+	<style>
+@IMPORT url("estilo.css");
+</style>
+</h:head>
+<h:body>
+
+	<h1>Cadastro de Clientes</h1>
+	<h:messages infoClass="info" errorClass="erro" warnClass="warn"
+		fatalClass="fatal" />
+
+	<h:form
+		rendered="#{not empty sistemaGerenciadorBean.clienteSelecionado}">
+		<h:panelGrid columns="1">
+			<f:facet name="header">Dados Gerais</f:facet>
+
+			<h:outputLabel for="nome" value="Nome" />
+			<h:inputText id="nome"
+				value="#{sistemaGerenciadorBean.clienteSelecionado.nome}" />
+			<h:message for="nome" />
+
+			<h:outputLabel for="email" value="Email: " />
+			<h:inputText id="email"
+				value="#{sistemaGerenciadorBean.clienteSelecionado.email}"
+				immediate="true" validatorMessage="Email Inválido!" />
+
+			<h:outputLabel for="telefone" value="Telefone: " />
+			<h:inputText id="telefone"
+				value="#{sistemaGerenciadorBean.clienteSelecionado.telefone}" />
+
+			<h:outputLabel for="cpf" value="CPF: " />
+			<h:inputText id="cpf"
+				value="#{sistemaGerenciadorBean.clienteSelecionado.cpf}"
+				validatorMessage="CPF Inválido!">
+				<f:validateRegex pattern="\d{3}(\.\d{3}){2}-\d{2}" />
+			</h:inputText>
+
+			<h:outputLabel for="sexo" value="Sexo" />
+			<h:selectOneRadio id="sexo"
+				value="#{sistemaGerenciadorBean.clienteSelecionado.sexo}">
+				<f:selectItems value="#{sistemaGerenciadorBean.sexos}" var="s"
+					itemLabel="#{s.nome}" />
+			</h:selectOneRadio>
+		</h:panelGrid>
+
+
+
+		<h:commandButton action="#{sistemaGerenciadorBean.salvar}"
+			value="Salvar" />
+		<h:commandButton value="Cancelar"
+			action="#{sistemaGerenciadorBean.cancelar}" immediate="true" />
+
+		<h2>Lista de Clientes Cadastrados</h2>
+
+		<h:dataTable value="#{sistemaGerenciadorBean.lista}" var="p"
+			rowClasses="linha1, linha2">
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				<h:outputText value="#{p.nome}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Email</f:facet>
+				<h:outputText value="#{p.email}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Telefone</f:facet>
+				<h:outputText value="#{p.telefone}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">CPF</f:facet>
+				<h:outputText value="#{p.cpf}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Sexo</f:facet>
+				<h:outputText value="#{p.sexo}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Quantidade de Manutencões</f:facet>
+				<h:outputText value="#{p.quantManutencoes}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Ações</f:facet>
+				<h:commandLink value="Editar"> |
+                        <f:setPropertyActionListener value="#{p}"
+						target="#{sistemaGerenciadorBean.clienteSelecionado}" />
+				</h:commandLink>
+				<h:commandLink value="Excluir"
+					action="#{sistemaGerenciadorBean.excluir}">
+					<f:setPropertyActionListener value="#{p}"
+						target="#{sistemaGerenciadorBean.clienteSelecionado}" />
+				</h:commandLink>
+			</h:column>
+		</h:dataTable>
+	</h:form>
+</h:body>
+</html>
