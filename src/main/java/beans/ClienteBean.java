@@ -129,7 +129,7 @@ public class ClienteBean implements Serializable {
 		System.out.println("LOCAL DO PRINT: metodo cadastroManutencaoButton() em clienteBean");
 		System.out.println("retorno do método instanciarCampoManutencao: " + campoManutencao.toString());
 		System.out.println("objeto cliente da classe ManutencaoBean: " + campoManutencao.getCliente().toString());
-		System.out.println("----------------------------------------------------------------------------------------------------------");
+		System.out.println("------------------------------------------------------------------------------------------------------");
 		return "manutencoes.jsf";
 		
 	}
