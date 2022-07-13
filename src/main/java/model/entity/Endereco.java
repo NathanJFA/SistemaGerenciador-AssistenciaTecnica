@@ -13,21 +13,31 @@ public class Endereco implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idEndereco;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cliente_id",nullable = false)
+	private Cliente cliente;
 	private String cidade;
 	private String rua;
 	private String bairro;
 	private String complemento;
 	private String numero;
 
-
-	
 	public Endereco() {
-		super();
+		this.bairro="";
+		this.cidade="";
+		this.complemento="";
+		this.numero="";
+		this.rua="";
 	}   
-	   
-  
+	
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
 	public String getRua() {
 		return this.rua;
 	}
@@ -60,6 +70,12 @@ public class Endereco implements Serializable {
 	}
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
+	}
+
+	@Override
+	public String toString() {
+		return "Endereco [cliente=" + cliente + ", cidade=" + cidade + ", rua=" + rua + ", bairro=" + bairro
+				+ ", complemento=" + complemento + ", numero=" + numero + "]";
 	}
    
 }

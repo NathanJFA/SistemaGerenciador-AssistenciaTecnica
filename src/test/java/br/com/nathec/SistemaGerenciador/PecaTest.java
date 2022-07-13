@@ -77,7 +77,7 @@ public class PecaTest {
 		
 		service.cadastrar(peca1);		
 		
-		Collection<Peca> pecas = service.recuperarClientes();
+		Collection<Peca> pecas = service.recuperarPecas();
 		assertTrue(pecas.size() > 0);
 	}
 	

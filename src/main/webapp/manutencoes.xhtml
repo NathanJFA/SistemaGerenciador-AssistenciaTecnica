@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+
+
+<ui:composition template="/estrutura.xhtml">
+	<ui:param name="titulo" value="Gerenciamento de Manutenções" />
+	<ui:define name="direita">
+		<h:messages infoClass="info" errorClass="erro" warnClass="warn"
+			fatalClass="fatal" />
+	</ui:define>
+	<h1>Manutencões do Cliente:
+		#{manutencaoBean.campoManutencao.cliente.nome}</h1>
+	<h:messages infoClass="info" errorClass="erro" warnClass="warn"
+		fatalClass="fatal" />
+	<f:event listener="#{manutencaoBean.inicializaComponentes()}"
+		type="preRenderView" />
+	<h:form rendered="#{not empty manutencaoBean.campoManutencao}">
+		<h:panelGrid columns="1">
+			<f:facet name="header">Dados Gerais da Manutenção</f:facet>
+
+			<h:outputLabel for="descricao" value="Descricao: " />
+			<h:inputText id="descricao"
+				value="#{manutencaoBean.campoManutencao.descricao}" required="true"
+				requiredMessage="Descrição é obrigatória!! " />
+			<h:message for="nome" />
+
+			<h:outputLabel for="valor" value="Valor: " />
+			<h:inputText id="valor"
+				value="#{manutencaoBean.campoManutencao.valor}" />
+
+			<h:selectOneMenu id="equipamentos"
+				value="#{manutencaoBean.campoManutencao.tipoEquipamento}">
+				<f:selectItems value="#{manutencaoBean.tiposEquipamento}" var="s"
+					itemLabel="#{s.nome}" />
+			</h:selectOneMenu>
+
+			<!--  -->
+
+			<h:panelGrid columns="1">
+				<h:dataTable
+					value="#{manutencaoBean.campoManutencao.pecasUtilizadas}" var="p">
+					<h:column>
+						<f:facet name="header">Descrição</f:facet>
+						#{p.descricao}
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">Ações</f:facet>
+						<h:commandLink value="Remover"
+							action="#{manutencaoBean.removerPeca()}">
+							<f:setPropertyActionListener value="#{p}"
+								target="#{manutencaoBean.peca}">
+							</f:setPropertyActionListener>
+						</h:commandLink>
+					</h:column>
+				</h:dataTable>
+
+				<!-- <h:commandButton action="#{manutencaoBean.mostrarListaPecas()}" value="Adicionar" />  -->
+
+				<h:dataTable value="#{manutencaoBean.pecas}" var="p"
+					rendered="#{manutencaoBean.mostraListaPecas}">
+
+					<h:column>
+						<f:facet name="header">Descrição</f:facet>
+						#{p.descricao}
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">Ações</f:facet>
+						<h:commandLink value="Adicionar"
+							action="#{manutencaoBean.adicionarPecaNaManutencao()}">
+							<f:setPropertyActionListener value="#{p}"
+								target="#{manutencaoBean.peca}">
+							</f:setPropertyActionListener>
+						</h:commandLink>
+					</h:column>
+				</h:dataTable>
+
+			</h:panelGrid>
+
+			<!--  -->
+
+			<h:outputLabel for="data" value="Data da Manutenção: " />
+			<h:inputText id="data" value="#{manutencaoBean.campoManutencao.data}"
+				converterMessage="Dia/Mês/Ano">
+				<f:convertDateTime pattern="dd/MM/yyyy" required="true"
+					requiredMessage="Data da Manutenção é obrigatória!! " />
+			</h:inputText>
+
+			<h:selectOneMenu id="servicos"
+				value="#{manutencaoBean.campoManutencao.tipoServico}">
+				<f:selectItems value="#{manutencaoBean.tiposServico}" var="s"
+					itemLabel="#{s.nome}" />
+			</h:selectOneMenu>
+
+		</h:panelGrid>
+		<br />
+		<h:commandButton action="#{manutencaoBean.salvarManutencao()}"
+			value="Salvar" />
+		<h:commandButton action="#{manutencaoBean.excluirManutencao()}"
+			value="Excluir" />
+		<h:commandButton value="Cancelar"
+			action="#{manutencaoBean.cancelar()}" immediate="true" />
+	</h:form>
+	<h:form>
+
+		<h2>Lista de Manutencoes Cadastradas do Cliente</h2>
+
+		<h:dataTable value="#{manutencaoBean.manutencoesDoCliente}" var="p"
+			rowClasses="linha1, linha2">
+			<h:column>
+				<f:facet name="header">Descricao</f:facet>
+				<h:outputText value="#{p.descricao}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Entregue? </f:facet>
+				<h:outputText value="#{p.entregue}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Pagamento Efetuado? </f:facet>
+				<h:outputText value="#{p.pagou}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Tipo de Equipamento</f:facet>
+				<h:outputText value="#{p.tipoEquipamento}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Nome do Cliente</f:facet>
+				<h:outputText value="#{p.cliente.nome}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Quant Pecas Utilizadas</f:facet>
+				<h:outputText value="#{p.quantPecas()}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Tipo de Serviço</f:facet>
+				<h:outputText value="#{p.tipoServico}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Ações</f:facet>
+				<h:commandLink action="#{manutencaoBean.buscaObjetoEdicao()}"
+					value="Editar">
+					<f:setPropertyActionListener value="#{p}"
+						target="#{manutencaoBean.campoManutencao}" />
+				</h:commandLink>
+				<h:commandLink action="#{manutencaoBean.excluirManutencao()}"
+					value="Excluir">
+					<f:setPropertyActionListener value="#{p}"
+						target="#{manutencaoBean.campoManutencao}" />
+				</h:commandLink>
+			</h:column>
+		</h:dataTable>
+	</h:form>
+</ui:composition>
+</html>

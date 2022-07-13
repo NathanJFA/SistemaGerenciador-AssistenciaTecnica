@@ -38,13 +38,9 @@ public interface ClienteDaoInter {
 
 	public void removeById(final int id);
 
-	public void updateEnderecoByCpf(Endereco endereco, String cpf);
-	
-	public void updateEnderecoById(Endereco endereco, int id);
 	
 	public Cliente getByCPF(String cpf);
 	
 	public Collection<Manutencao> findManutencoesByCpfCliente(String cpf);
 	
-	public Endereco findEnderecoByCpfCLiente(String cpf);
 }

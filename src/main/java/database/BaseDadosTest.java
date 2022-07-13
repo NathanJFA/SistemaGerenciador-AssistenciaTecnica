@@ -7,11 +7,11 @@ import javax.persistence.EntityManager;
 
 import model.entity.Cliente;
 import model.entity.Endereco;
-import model.entity.Equipamento;
 import model.entity.Manutencao;
 import model.entity.Peca;
 import model.entity.Sexo;
-import model.entity.TipoServico;
+import model.enumerateds.Equipamento;
+import model.enumerateds.TipoServico;
 
 public class BaseDadosTest {
 	
@@ -39,11 +39,13 @@ public class BaseDadosTest {
 			endereco.setComplemento("proximo a quadra" + i);
 			endereco.setCidade("mataraca");
 			endereco.setNumero("4");
-			cliente.setEndereco(endereco);
+			
 			clientes.add(cliente);
 			
 			try {
 				em.persist(cliente);
+				endereco.setCliente(cliente);
+				em.persist(endereco);
 			}catch(Exception e) {
 				e. printStackTrace();
 				System.out.println("Deu ruim na criação de cliente");
@@ -77,6 +79,7 @@ public class BaseDadosTest {
 			
 			for(int j=0; j < clientes.size(); j++) {
 				manutencao.setCliente(this.clientes.get(i));
+				this.clientes.get(i).addManutencao(manutencao);
 				manutencoes.add(manutencao);
 			}
 

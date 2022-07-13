@@ -145,4 +145,15 @@ public class ManutencaoDAO implements ManutencaoDaoInter {
 		}
 		return null;
 	}
+
+	public Collection<Manutencao> findByIdCliente(int id) {
+		try {
+			Query query = entityManager.createQuery("SELECT * FROM Manutencao m WHERE m.cliente_idCliente = :parametro");
+			query.setParameter("parametro", "%" + id + "%");
+			return query.getResultList();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
 }

@@ -37,5 +37,5 @@ public interface ManutencaoDaoInter {
 	
 	public Collection<Manutencao> findByValor(Double valor);
 	
-	
+	public Collection<Manutencao> findByIdCliente(int id);
 }

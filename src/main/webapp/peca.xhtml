@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<ui:composition template="/estrutura.xhtml">
+	<ui:param name="titulo" value="Cadastro de Pecas" />
+	<ui:define name="direita">
+		<h:messages infoClass="info" errorClass="erro" warnClass="warn"
+			fatalClass="fatal" />
+	</ui:define>
+	<f:event listener="#{manutencaoBean.inicializaListagemPecas()}" type="preRenderView" />
+	<h1>Cadastro de Peça</h1>
+	<h:messages infoClass="info" errorClass="erro" warnClass="warn"
+		fatalClass="fatal" />
+	<h:form rendered="#{not empty manutencaoBean.peca}">
+		<h:panelGrid columns="1">
+			<f:facet name="header">Dados</f:facet>
+
+			<h:outputLabel for="descricao" value="Descrição: " />
+			<h:inputText id="descricao" value="#{manutencaoBean.peca.descricao}" />
+			<h:message for="nome" />
+
+			<h:outputLabel for="valor" value="Valor: " />
+			<h:inputText id="valor"
+				value="#{manutencaoBean.peca.valorPreDefinido}" />
+		</h:panelGrid>
+
+		<h:commandButton action="#{manutencaoBean.salvarPeca}" value="Salvar" />
+		<h:commandButton value="Cancelar"
+			action="#{manutencaoBean.cancelarPeca}" immediate="true" />
+
+
+
+
+		<h2>Lista de Peças Cadastradas</h2>
+
+		<h:dataTable value="#{manutencaoBean.pecas}" var="p"
+			rowClasses="linha1, linha2">
+			<h:column>
+				<f:facet name="header">Descrição: </f:facet>
+				<h:outputText value="#{p.descricao}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Valor</f:facet>
+				<h:outputText value="#{p.valorPreDefinido}" escape="true" />
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">Ações</f:facet>
+				<h:commandLink value="Editar">
+					<f:setPropertyActionListener value="#{p}"
+						target="#{manutencaoBean.peca}" />
+				</h:commandLink> |
+				<h:commandLink value="Excluir"
+					action="#{manutencaoBean.excluirPeca()}">
+					<f:setPropertyActionListener value="#{p}"
+						target="#{manutencaoBean.peca}" />
+				</h:commandLink> |
+			</h:column>
+		</h:dataTable>
+	</h:form>
+</ui:composition>
+</html>

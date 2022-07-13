@@ -8,7 +8,7 @@ import model.entity.Peca;
 
 public interface PecaDaoInter {
 
-	public static PecaDaoInter getInstance() {
+	public static PecaDAO getInstance() {
 		return null;
 	}
 

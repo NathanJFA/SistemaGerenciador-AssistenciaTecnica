@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+
+<ui:composition template="/estrutura.xhtml">
+	<ui:param name="titulo" value="Gerenciamento de Endereço" />
+	<ui:define name="direita">
+		<h:messages infoClass="info" errorClass="erro" warnClass="warn"
+			fatalClass="fatal" />
+	</ui:define>
+	<f:event listener="#{enderecoBean.inicializaComponentes()}" type="preRenderView" />
+	<h1>Gerenciamento de endereço</h1>
+	<h:messages infoClass="info" errorClass="erro" warnClass="warn"
+		fatalClass="fatal" />
+	<h:form rendered="#{not empty enderecoBean.endereco}">
+		<h2>Endereço do(a) cliente:
+			#{enderecoBean.endereco.cliente.nome}</h2>
+		<h:panelGrid columns="1">
+			<f:facet name="header">Dados Gerais</f:facet>
+
+			<h:outputLabel for="rua" value="Rua: " />
+			<h:inputText id="rua" value="#{enderecoBean.endereco.rua}" />
+			<h:message for="rua" />
+
+			<h:outputLabel for="bairro" value="Bairro: " />
+			<h:inputText id="bairro"
+				value="#{enderecoBean.endereco.bairro}" />
+
+			<h:outputLabel for="cidade" value="Cidade: " />
+			<h:inputText id="cidade"
+				value="#{enderecoBean.endereco.cidade}" />
+
+			<h:outputLabel for="numero" value="Numero: " />
+			<h:inputText id="numero"
+				value="#{enderecoBean.endereco.numero}"
+				validatorMessage="É preciso inserir números!">
+			</h:inputText>
+			<h:outputLabel for="complemento" value="Complemento: " />
+			<h:inputText id="complemento"
+				value="#{enderecoBean.endereco.complemento}">
+			</h:inputText>
+		</h:panelGrid>
+
+		<h:commandButton action="#{enderecoBean.salvarEndereco}" value="Salvar"/>
+		<h:commandButton action="#{enderecoBean.excluirEndereco}" value="Excluir"
+			 immediate="true" />
+		<h:commandButton value="Cancelar"
+			action="#{enderecoBean.cancelar}" immediate="true" />
+	</h:form>
+</ui:composition>
+</html>

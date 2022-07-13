@@ -1,12 +1,29 @@
 package model.entity;
 
 import java.io.Serializable;
-import java.lang.String;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Cascade;
+import model.enumerateds.Equipamento;
+import model.enumerateds.TipoServico;
 
 
 @Entity
@@ -16,16 +33,21 @@ public class Manutencao implements Serializable {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idManutencao;
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private Equipamento tipoEquipamento;
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private TipoServico tipoServico;
 	private double valor;
 	private String descricao;
+	@Temporal(TemporalType.DATE)
+	@Column(nullable = false)
+	private Date data;
 	private boolean entregue;
 	private boolean pagou;	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = { CascadeType.MERGE})
 	private Cliente cliente;
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
 	@JoinTable(name="pecasManutencoes",
 			joinColumns=@JoinColumn(name="id_manutencao"),
 			inverseJoinColumns=@JoinColumn(name="id_peca"))
@@ -33,7 +55,11 @@ public class Manutencao implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public Manutencao() {
-		super();
+		this.descricao="";
+		this.data=new Date();
+		this.entregue=false;
+		this.pagou=false;
+		this.pecasUtilizadas= new ArrayList<>();
 	}
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
@@ -48,7 +74,13 @@ public class Manutencao implements Serializable {
 	public void setIdManutencao(int idMautencao) {
 		this.idManutencao = idManutencao;
 	}
-
+	public int quantPecas() {
+		if(pecasUtilizadas == null) {
+			pecasUtilizadas = new ArrayList<>();
+			return pecasUtilizadas.size();
+		}
+		return pecasUtilizadas.size();
+	}
 	public Equipamento getTipoEquipamento() {
 		return this.tipoEquipamento;
 	}
@@ -112,5 +144,11 @@ public class Manutencao implements Serializable {
 	}
 	public Cliente getCliente() {
 		return cliente;
+	}
+	public Date getData() {
+		return data;
+	}
+	public void setData(Date data) {
+		this.data = data;
 	}
 }

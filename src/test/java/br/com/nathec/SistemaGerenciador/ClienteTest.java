@@ -12,12 +12,13 @@ import org.junit.Test;
 
 import model.entity.Cliente;
 import model.entity.Endereco;
-import model.entity.Equipamento;
 import model.entity.Manutencao;
 import model.entity.Peca;
 import model.entity.Sexo;
-import model.entity.TipoServico;
+import model.enumerateds.Equipamento;
+import model.enumerateds.TipoServico;
 import model.services.ClienteService;
+import model.services.EnderecoService;
 import model.services.ManutencaoService;
 import model.services.PecaService;
 
@@ -26,6 +27,7 @@ public class ClienteTest {
 	ClienteService instanciaService = new ClienteService();
 	ManutencaoService instanciaServiceManutencao = new ManutencaoService();
 	PecaService instanciaPecaService = new PecaService();
+	EnderecoService enderecoService = new EnderecoService();
 	
 	@Test
 	public void testaCadastroCliente() {
@@ -52,9 +54,14 @@ public class ClienteTest {
 		endereco.setCidade("Mataraca");
 		endereco.setComplemento("proximo a quadra");
 		endereco.setNumero("5");
-		cliente.setEndereco(endereco);
+		
 		
 		instanciaService.cadastrar(cliente);
+		
+		endereco.setCliente(cliente);
+		
+		enderecoService.cadastrar(endereco);
+		
 		
 		//Cliente cliente = instanciaService.procurarPorId(1);
 		
@@ -93,6 +100,7 @@ public class ClienteTest {
 		manutencoes.add(manutencao);
 		cliente.setManutencoesCliente((ArrayList<Manutencao>) manutencoes);
 		
+		assertEquals(cliente.getIdCliente(), enderecoService.procurarPorId(endereco.getCliente().getIdCliente()).getCliente().getIdCliente());
 		assertEquals(cliente.getIdCliente(), instanciaService.procurarPorId(cliente.getIdCliente()).getIdCliente());
 		assertNotNull(instanciaService.procurarPorId(cliente.getIdCliente()));
 	}
@@ -113,6 +121,40 @@ public class ClienteTest {
 		assertNull(instanciaService.procurarPorId(cliente.getIdCliente()));
 
 	}
+	@Test
+	public void testaRemocaoComEndereco() {
+		Cliente cliente = new Cliente();
+		cliente.setNome("Teste de insercao e remocao com endereco");
+		cliente.setEmail("sistema@teste.com.br");
+		cliente.setSexo(Sexo.F);
+		cliente.setTelefone("8734343323");
+		instanciaService.cadastrar(cliente);
+
+		assertNotNull(instanciaService.procurarPorId(cliente.getIdCliente()));
+		
+		Endereco endereco = new Endereco();
+		endereco.setBairro("planalto 2");
+		endereco.setCidade("Mataraca");
+		endereco.setComplemento("proximo a quadra");
+		endereco.setNumero("5");
+		
+		endereco.setCliente(cliente);
+		enderecoService.cadastrar(endereco);
+		
+		assertEquals(instanciaService.procurarPorId(cliente.getIdCliente()), enderecoService.procurarPorId(cliente.getIdCliente()).getCliente().getIdCliente());
+		
+		//enderecoService.remover(endereco);
+		
+		instanciaService.remover(cliente);
+
+		assertNull(instanciaService.procurarPorId(cliente.getIdCliente()));
+
+	}
+	
+	
+	
+
+	
 
 	@Test
 	public void testaAtualizacao() {

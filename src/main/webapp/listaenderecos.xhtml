@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:esp="http://www.especializa.com.br/facelets/taglibs"
+	xmlns:espc="http://java.sun.com/jsf/composite/componentes">
+
+
+<ui:composition template="/estrutura.xhtml">
+	<ui:param name="titulo" value="Listagem de Endereços" />
+	<ui:define name="direita">
+		<h:messages infoClass="info" errorClass="erro" warnClass="warn"
+			fatalClass="fatal" />
+	</ui:define>
+	<f:event listener="#{enderecoBean.inicializaListagem()}" type="preRenderView" />
+		<h1>Todos os Endereços</h1>
+	<h:form id="formTabela" rendered="#{not empty enderecoBean.enderecos}">
+		<h:dataTable value="#{enderecoBean.enderecos}" var="e"
+			rowClasses="linha1, linha2">
+			<h:column>
+				<f:facet name="header">Cliente</f:facet>
+				<h:outputText value="#{e.cliente.nome}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Rua</f:facet>
+				<h:outputText value="#{e.rua}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Bairro</f:facet>
+				<h:outputText value="#{e.bairro}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Numero</f:facet>
+				<h:outputText value="#{e.complemento}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Cidade</f:facet>
+				<h:outputText value="#{e.cidade}" escape="true" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Ações</f:facet>
+				<h:commandLink action="#{enderecoBean.editarEnderecoAPartirDaLista}" value="Editar">
+					<f:setPropertyActionListener value="#{e}"
+						target="#{enderecoBean.endereco}" />
+				</h:commandLink> |
+				<h:commandLink value="Excluir"
+					action="#{enderecoBean.excluirEndereco()}">
+					<f:setPropertyActionListener value="#{e}"
+						target="#{enderecoBean.endereco}" />
+				</h:commandLink> |
+			</h:column>
+		</h:dataTable>
+	</h:form>
+</ui:composition>
+</html>

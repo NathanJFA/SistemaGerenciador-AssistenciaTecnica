@@ -15,11 +15,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.Cascade;
+import beans.EnderecoBean;
+import model.services.EnderecoService;
 
 /**
  * Entity implementation class for Entity: Cliente
@@ -33,21 +32,22 @@ public class Cliente implements Serializable {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idCliente;
 	private String nome;
-	@Column(unique=true)
+	@Column(unique=true, nullable = false)
 	private String cpf;
 	private String telefone;
+	@Column(nullable=false)
 	private String email;
 	@Enumerated(EnumType.STRING)
 	private Sexo sexo;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "endereco_id")
-	private Endereco endereco;
-	@OneToMany(mappedBy="cliente",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-	private Collection<Manutencao> manutencoesCliente;
+	@OneToMany(mappedBy="cliente",fetch = FetchType.EAGER)
+	private Collection<Manutencao> manutencoesCliente = new ArrayList<>();
 	
 
 	public Cliente() {
-		manutencoesCliente = new ArrayList<>();
+		this.nome = "";
+		this.cpf = "";
+		this.telefone = "";
+		this.email = "";
 	}   
 	   
 	public int getIdCliente() {
@@ -92,28 +92,20 @@ public class Cliente implements Serializable {
 
 	public void setSexo(Sexo sexo) {
 		this.sexo = sexo;
-	}   
-	
-	public Endereco getEndereco() {
-		return this.endereco;
-	}
-
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
-	}
-	
+	}   	
 	public Collection<Manutencao> getManutencoesCliente() {
 		return manutencoesCliente;
 	}
-	public void setManutencoesCliente(ArrayList<Manutencao> manutencoesCliente) {
-		this.manutencoesCliente = manutencoesCliente;
+	public void setManutencoesCliente(ArrayList<Manutencao> manutencoesDoCliente) {
+		this.manutencoesCliente = manutencoesDoCliente;
 	}
+
 	@Override
 	public String toString() {
 		return "Cliente [idCliente=" + idCliente + ", nome=" + nome + ", cpf=" + cpf + ", telefone=" + telefone
-				+ ", email=" + email + ", sexo=" + sexo + ", endereco=" + endereco + ", manutencoesCliente="
-				+ manutencoesCliente + "]";
+				+ ", email=" + email + ", sexo=" + sexo + ", manutencoesCliente=" + manutencoesCliente + "]";
 	}
+
 	public void addManutencao(Manutencao manutencao) {
 		this.manutencoesCliente.add(manutencao);
 	}
@@ -122,6 +114,14 @@ public class Cliente implements Serializable {
 	}
 	public int getQuantManutencoes() {
 		return this.manutencoesCliente.size();
+	}
+	public String possuiEndereco() {
+		EnderecoService enderecoService = EnderecoBean.enderecoService;
+		if(enderecoService.procurarPorId(idCliente) != null) {
+			return "Sim";
+		}else {
+			return "Não";
+		}
 	}
    
 }

@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:esp="http://www.especializa.com.br/facelets/taglibs"
+	xmlns:espc="http://java.sun.com/jsf/composite/componentes">
+
+
+<ui:composition template="/estrutura.xhtml" >
+	<ui:param name="titulo" value="Listagem de Manutenções" />
+	<ui:define name="direita">
+		<h:messages infoClass="info" errorClass="erro" warnClass="warn" fatalClass="fatal" />
+	</ui:define>
+	<div >
+		<f:event listener="#{manutencaoBean.inicializaListagem()}" type="preRenderView" />
+		<h:form id="formTabela">
+			<h1>Manutenções Cadastradas</h1>
+			<h:dataTable value="#{manutencaoBean.manutencoes}" var="m"
+				rowClasses="linha1, linha2">
+				<h:column>
+					<f:facet name="header">Cliente</f:facet>
+					<h:outputText value="#{m.cliente.nome}" escape="true" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Descrição</f:facet>
+					<h:outputText value="#{m.descricao}" escape="true" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Valor</f:facet>
+					<h:outputText value="#{m.valor}" escape="true" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Pagou</f:facet>
+					<h:outputText value="#{m.pagou}" escape="true" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Entregue</f:facet>
+					<h:outputText value="#{m.entregue}" escape="true" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Tipo de Equipamento</f:facet>
+					<h:outputText value="#{m.tipoServico}" escape="true" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Tipo de Serviço</f:facet>
+					<h:outputText value="#{m.tipoEquipamento}" escape="true" />
+				</h:column>
+				</h:dataTable>
+		</h:form>
+	</div>
+</ui:composition>
+</html>

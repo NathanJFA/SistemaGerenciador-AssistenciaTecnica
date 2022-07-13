@@ -4,62 +4,60 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html">
 
-<h:head>
-	<title>Cadastro de Clientes</title>
-	<style>
-@IMPORT url("estilo.css");
-</style>
-</h:head>
-<h:body>
+<ui:composition template="/estrutura.xhtml">
+	<ui:param name="titulo" value="Cadastro de Clientes" />
+	<ui:define name="direita">
+		<h:messages infoClass="info" errorClass="erro" warnClass="warn"
+			fatalClass="fatal" />
+	</ui:define>
 
+	<f:event listener="#{clienteBean.inicializaComponentes()}" type="preRenderView" />
 	<h1>Cadastro de Clientes</h1>
 	<h:messages infoClass="info" errorClass="erro" warnClass="warn"
 		fatalClass="fatal" />
-
-	<h:form
-		rendered="#{not empty sistemaGerenciadorBean.clienteSelecionado}">
+	<h:form rendered="#{not empty clienteBean.clienteSelecionado}">
 		<h:panelGrid columns="1">
 			<f:facet name="header">Dados Gerais</f:facet>
 
 			<h:outputLabel for="nome" value="Nome" />
 			<h:inputText id="nome"
-				value="#{sistemaGerenciadorBean.clienteSelecionado.nome}" />
+				value="#{clienteBean.clienteSelecionado.nome}" />
 			<h:message for="nome" />
 
 			<h:outputLabel for="email" value="Email: " />
 			<h:inputText id="email"
-				value="#{sistemaGerenciadorBean.clienteSelecionado.email}"
+				value="#{clienteBean.clienteSelecionado.email}"
 				immediate="true" validatorMessage="Email Inválido!" />
 
 			<h:outputLabel for="telefone" value="Telefone: " />
 			<h:inputText id="telefone"
-				value="#{sistemaGerenciadorBean.clienteSelecionado.telefone}" />
+				value="#{clienteBean.clienteSelecionado.telefone}" />
 
 			<h:outputLabel for="cpf" value="CPF: " />
 			<h:inputText id="cpf"
-				value="#{sistemaGerenciadorBean.clienteSelecionado.cpf}"
+				value="#{clienteBean.clienteSelecionado.cpf}"
 				validatorMessage="CPF Inválido!">
 				<f:validateRegex pattern="\d{3}(\.\d{3}){2}-\d{2}" />
 			</h:inputText>
 
 			<h:outputLabel for="sexo" value="Sexo" />
 			<h:selectOneRadio id="sexo"
-				value="#{sistemaGerenciadorBean.clienteSelecionado.sexo}">
-				<f:selectItems value="#{sistemaGerenciadorBean.sexos}" var="s"
+				value="#{clienteBean.clienteSelecionado.sexo}">
+				<f:selectItems value="#{clienteBean.sexos}" var="s"
 					itemLabel="#{s.nome}" />
 			</h:selectOneRadio>
 		</h:panelGrid>
 
+		<br/>
 
-
-		<h:commandButton action="#{sistemaGerenciadorBean.salvar}"
+		<h:commandButton action="#{clienteBean.salvarCliente}"
 			value="Salvar" />
 		<h:commandButton value="Cancelar"
-			action="#{sistemaGerenciadorBean.cancelar}" immediate="true" />
+			action="#{clienteBean.cancelar}" immediate="true" />
 
 		<h2>Lista de Clientes Cadastrados</h2>
 
-		<h:dataTable value="#{sistemaGerenciadorBean.lista}" var="p"
+		<h:dataTable value="#{clienteBean.listaClientes}" var="p"
 			rowClasses="linha1, linha2">
 			<h:column>
 				<f:facet name="header">Nome</f:facet>
@@ -86,18 +84,32 @@
 				<h:outputText value="#{p.quantManutencoes}" escape="true" />
 			</h:column>
 			<h:column>
+				<f:facet name="header">Possui Endereço</f:facet>
+				<h:outputText value="#{p.possuiEndereco()}" escape="true" />
+			</h:column>
+			<h:column>
 				<f:facet name="header">Ações</f:facet>
-				<h:commandLink value="Editar"> |
-                        <f:setPropertyActionListener value="#{p}"
-						target="#{sistemaGerenciadorBean.clienteSelecionado}" />
-				</h:commandLink>
-				<h:commandLink value="Excluir"
-					action="#{sistemaGerenciadorBean.excluir}">
+				<h:commandLink value="Editar">
 					<f:setPropertyActionListener value="#{p}"
-						target="#{sistemaGerenciadorBean.clienteSelecionado}" />
+						target="#{clienteBean.clienteSelecionado}" />
+				</h:commandLink> |
+				<h:commandLink value="Excluir"
+					action="#{clienteBean.excluirCliente()}">
+					<f:setPropertyActionListener value="#{p}"
+						target="#{clienteBean.clienteSelecionado}" />
+				</h:commandLink> |
+				<h:commandLink value="Endereço"
+					action="#{clienteBean.editarEnderecoButton()}">
+					<f:setPropertyActionListener value="#{p}"
+						target="#{clienteBean.clienteSelecionado}" />
+				</h:commandLink> |
+				<h:commandLink value="Manutenção"
+					action="#{clienteBean.cadastroManutencaoButton()}">
+					<f:setPropertyActionListener value="#{p}"
+						target="#{clienteBean.clienteSelecionado}" />
 				</h:commandLink>
 			</h:column>
 		</h:dataTable>
 	</h:form>
-</h:body>
+</ui:composition>
 </html>

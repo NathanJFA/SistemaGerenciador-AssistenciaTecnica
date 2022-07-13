@@ -44,7 +44,7 @@ public class ClienteDAO implements ClienteDaoInter {
 		return entityManager.find(Cliente.class, id);
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public List<Cliente> findAll() {
 		return entityManager.createQuery("FROM " + Cliente.class.getName()).getResultList();
 	}
@@ -62,19 +62,6 @@ public class ClienteDAO implements ClienteDaoInter {
 		return null;
 	}
 
-	@Override
-	public void updateEnderecoByCpf(Endereco endereco, String cpf) {
-		Cliente cliente = this.getByCPF(cpf);
-		cliente.setEndereco(endereco);
-		this.persist(cliente);
-	}
-
-	@Override
-	public void updateEnderecoById(Endereco endereco, int id) {
-		Cliente cliente = this.getById(id);
-		cliente.setEndereco(endereco);
-		this.persist(cliente);
-	}
 
 	@Override
 	public Cliente getByCPF(String cpf) {
@@ -106,7 +93,7 @@ public class ClienteDAO implements ClienteDaoInter {
 	@Override
 	public void merge(Cliente cliente) {
 		try {
-			cliente.setNome(cliente.getNome().toLowerCase());
+			//cliente.setNome(cliente.getNome().toLowerCase());
 			entityManager.getTransaction().begin();
 			entityManager.merge(cliente);
 			entityManager.getTransaction().commit();
@@ -146,19 +133,6 @@ public class ClienteDAO implements ClienteDaoInter {
 			return cliente.getManutencoesCliente();
 		}catch (Exception ex) {
 			ex.printStackTrace();
-		}
-		return null;
-	}
-
-	@Override
-	public Endereco findEnderecoByCpfCLiente(String cpf) {
-		try {
-			Cliente cliente = this.getByCPF(cpf);
-			return cliente.getEndereco();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-
 		}
 		return null;
 	}
